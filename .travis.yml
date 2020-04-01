@@ -11,14 +11,18 @@ addons:
 cache:
   directories:
     - node_modules
-before_install:
-  - openssl aes-256-cbc -K $encrypted_53dc3e94967b_key -iv $encrypted_53dc3e94967b_iv
-    -in travis.enc -out ~/.ssh/id_rsa -d
-  - chmod 600 ~/.ssh/id_rsa
-  - echo -e "Host rmt\n\tHostname 62.234.116.168\n\tStrictHostKeyChecking no\n\tPort 339\n\tUser sorayama\n\tIdentityFile ~/.ssh/id_rsa\n" >> ~/.ssh/config
 install:
   - yarn
 scripts:
   - yarn build
-after_success:
-  - scp -P 339 -r build rmt:myrepo/cqbot/views/
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_53dc3e94967b_key -iv $encrypted_53dc3e94967b_iv
+    -in travis.enc -out ~/.ssh/id_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 ~/.ssh/id_rsa
+deploy:
+  provider: scripts
+  skip_cleanup: true
+  script: rsync -auz -e 'ssh -p 339' -r --delete-after --quiet $TRAVIS_BUILD_DIR/build sorayama@62.234.116.168:myrepo/cqbot/views
+  on:
+    branch: master
