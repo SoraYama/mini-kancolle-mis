@@ -27,8 +27,8 @@ interface Order {
   buyerId: number;
   createdAt: number;
   status: OrderStatus;
-  toTrade: number[];
-  wanted: number[];
+  toTrade: string;
+  wanted: string;
   orderType: OrderType;
 }
 
@@ -109,15 +109,13 @@ function OrderTable({ data, setOrder }: OrderTableProps) {
       title: "卖出",
       key: "toTrade",
       dataIndex: "toTrade",
-      width: 250,
-      render: (nums: number[]) => `[${nums.join(", ")}]`
+      width: 250
     },
     {
       title: "收到",
       key: "wanted",
       dataIndex: "wanted",
-      width: 250,
-      render: (nums: number[]) => `[${nums.join(", ")}]`
+      width: 250
     },
     {
       title: "日期",
