@@ -23,6 +23,6 @@ before_deploy:
 deploy:
   provider: scripts
   skip_cleanup: true
-  script: rsync -auz -e 'ssh -p 339' -r --delete-after --quiet $TRAVIS_BUILD_DIR/build sorayama@62.234.116.168:myrepo/cqbot/views
+  script: rsync -auz -e 'ssh -p 339 -oStrictHostKeyChecking=no' -r --delete-after --quiet $TRAVIS_BUILD_DIR/build sorayama@62.234.116.168:myrepo/cqbot/views
   on:
     branch: master
